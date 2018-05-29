@@ -6,18 +6,29 @@ import 'react-dropdown/style.css';
 import album1 from "./assets/placeholders/album1.jpg"
 import album2 from "./assets/placeholders/album2.jpg"
 import album3 from "./assets/placeholders/album3.jpg"
-import album4 from "./assets/placeholders/album4.jpeg"
+import album4 from "./assets/placeholders/album4.jpeg";
+import axios from 'axios';
+
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {activeIndex: 0}
+
   }
 
   onDisplayActive(index) {
     this.setState({
       activeIndex: index
     })
+  }
+
+  componentDidMount() {
+    const key = '4a9f5581a9cdf20a699f540ac52a95c9'
+    axios.get('http://ws.audioscrobbler.com/2.0/?method=tag.getTopTracks&tag=happy&api_key=' + key + '&limit=10&format=json')
+      .then( (res) => {
+        console.log(res.data.tracks.track[0].name);
+      })
   }
 
 
