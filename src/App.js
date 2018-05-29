@@ -19,7 +19,11 @@ class App extends Component {
 
   onDisplayActive(index) {
     this.setState({
-      activeIndex: index
+      activeIndex: index,
+      happyTrack: '',
+      happyName: '',
+      happyUrl: ''
+
     })
   }
 
@@ -27,14 +31,19 @@ class App extends Component {
     const key = '4a9f5581a9cdf20a699f540ac52a95c9'
     axios.get('http://ws.audioscrobbler.com/2.0/?method=tag.getTopTracks&tag=happy&api_key=' + key + '&limit=10&format=json')
       .then( (res) => {
-        console.log(res.data.tracks.track[0].name);
+        this.setState({
+          happyTrack: res.data.tracks.track[0].name,
+          happyName: res.data.tracks.track[0].artist.name,
+          happyUrl: res.data.tracks.track[0].image[2]['#text']
+        })
+        console.log(this.state);
       })
   }
 
 
   render() {
     const moodOptions = [
-        'one', 'two', 'three'
+        'happy', 'sad', 'calm'
     ]
     const selectOptions = [
       'one', 'two', 'three'
@@ -83,9 +92,10 @@ class App extends Component {
                 </div>
                 <div className="col-4" style={{ borderLeft: '1px solid black'}}>
                   <div style={this.state.activeIndex == 0 ? {background: '#cecece', borderRadius: 20} : {}}>
-                    <img style={{width: 100, height: 100}} className="pt-4" src={album1} onClick={()=>this.onDisplayActive(0)}/>
+                    <img style={{width: 100, height: 100}} className="pt-4" src={this.state.happyUrl} onClick={()=>this.onDisplayActive(0)}/>
                     <div>
-                      <h4>song1</h4>
+                      <h4>{this.state.happyTrack}</h4>
+                      <h4>{this.state.happyName}</h4>
                     </div>
                   </div>
                   <div style={this.state.activeIndex == 1 ? {background: '#cecece', borderRadius: 20} : {}}>
