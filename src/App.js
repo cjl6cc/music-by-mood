@@ -17,7 +17,11 @@ class App extends Component {
 
   onDisplayActive(index) {
     this.setState({
-      activeIndex: index
+      activeIndex: index,
+      happyTrack: "",
+      happyName: "",
+      happyUrl: "",
+      mood: ""
     });
   }
 
@@ -25,15 +29,29 @@ class App extends Component {
     const key = "4a9f5581a9cdf20a699f540ac52a95c9";
     axios
       .get(
-        "http://ws.audioscrobbler.com/2.0/?method=tag.getTopTracks&tag=happy&api_key=" +
+        "http://ws.audioscrobbler.com/2.0/?method=tag.getTopTracks&tag=" +
+          this.state.mood +
+          "&api_key=" +
           key +
           "&limit=10&format=json"
       )
       .then(res => {
-        console.log(res.data.tracks.track[0].name);
+        this.setState({
+          happyTrack: res.data.tracks.track[0].name,
+          happyName: res.data.tracks.track[0].artist.name,
+          happyUrl: res.data.tracks.track[0].image[2]["#text"]
+        });
+        console.log(this.state);
       });
   }
 
+  selectHandler = e => {
+    //console.log(e.value);
+    this.setState({
+      mood: e.value
+    });
+    console.log(this.state.mood);
+  };
   render() {
     const moodOptions = ["happy", "sad", "calm"];
     const selectOptions = ["one", "two", "three"];
@@ -56,7 +74,9 @@ class App extends Component {
               </div>
               <Dropdown
                 options={moodOptions}
-                onChange={this._onSelect}
+                onChange={e => {
+                  this.selectHandler(e);
+                }}
                 value={defaultMoodOption}
                 placeholder="Select an option"
               />
@@ -66,6 +86,7 @@ class App extends Component {
                 <h2>Sort by:</h2>
               </div>
               <Dropdown
+                placeholderClassName="Select"
                 options={selectOptions}
                 onChange={this._onSelect}
                 value={defaultSelectOption}
@@ -114,11 +135,12 @@ class App extends Component {
                     <img
                       style={{ width: 100, height: 100 }}
                       className="pt-4"
-                      src={album1}
+                      src={this.state.happyUrl}
                       onClick={() => this.onDisplayActive(0)}
                     />
                     <div>
-                      <h4>song1</h4>
+                      <h4>{this.state.happyTrack}</h4>
+                      <h4>{this.state.happyName}</h4>
                     </div>
                   </div>
                   <div
