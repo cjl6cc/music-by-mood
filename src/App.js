@@ -4,10 +4,9 @@ import "./App.css";
 import Dropdown from "react-dropdown";
 import "react-dropdown/style.css";
 import album1 from "./assets/placeholders/album1.jpg";
-import album2 from "./assets/placeholders/album2.jpg";
-import album3 from "./assets/placeholders/album3.jpg";
-import album4 from "./assets/placeholders/album4.jpeg";
+
 import axios from "axios";
+import {ScrollBox, ScrollAxes, FastTrack} from 'react-scroll-box';
 
 class App extends Component {
   constructor(props) {
@@ -24,8 +23,9 @@ class App extends Component {
 
   onDisplayActive(index) {
     this.setState({
-      activeIndex: index,
+      activeIndex: index.target.value,
     });
+    console.log(index);
   }
 
   componentDidMount() {
@@ -71,7 +71,7 @@ class App extends Component {
   }
 
   render() {
-    console.log(this.state.song);
+    // console.log(this.state.song);
     const moodOptions = ["happy", "sad", "calm"];
     const selectOptions = ["one", "two", "three"];
     const defaultMoodOption = moodOptions[0];
@@ -149,26 +149,27 @@ class App extends Component {
 
                     <div>
 
+                      <ScrollBox style={{height: 50}}>
+                        {this.state.song.map((index)=> {
+                          return index.tracks.track.map((id)=>{
+                            // console.log(id);
+                            return (
+                              <div onClick={(e) => this.onDisplayActive(e)} key={id.id}>
+                                <img
+                                  style={{width: 100, height: 100}}
+                                  src={id.image[2]["#text"]}
+                                />
+                                <h4>{id.name}</h4>
+                                <h6>{id.artist.name}</h6>
+                              </div>
 
-                      {this.state.song.map((index)=> {
-                        return index.tracks.track.map((id)=>{
-                          console.log(id);
-                          return (
-                            <div>
-                              <h1>{id.name}</h1>
-                              <h4>{id.artist.name}</h4>
-                              <img
-                                style={{width: 100, height: 100}}
-                                src={id.image[2]["#text"]}
-                              />
-                            </div>
-
-                          )
-                        })
-                      })}
+                            )
+                          })
+                        })}
+                      </ScrollBox>
                     </div>
 
-                  
+
                 </div>
               </div>
             </div>
