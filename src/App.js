@@ -14,7 +14,11 @@ class App extends Component {
     super(props);
     this.state = {
       activeIndex: 0,
-      song = []
+      happyTrack: "",
+      happyName: "",
+      happyUrl: "",
+      mood: "",
+      song: []
     };
   }
 
@@ -36,9 +40,9 @@ class App extends Component {
       )
       .then(res => {
         this.setState({
-          song= res.data
+          song: [res.data]
         });
-        console.log(this.state);
+        // console.log(this.state);
       });
   }
 
@@ -62,24 +66,25 @@ class App extends Component {
       )
       .then(res => {
         this.setState({
-          happyTrack: res.data.tracks.track[0].name,
-          happyName: res.data.tracks.track[0].artist.name,
-          happyUrl: res.data.tracks.track[0].image[2]["#text"]
+          song: [res.data]
         });
       });
-    console.log(this.state.mood);
+    // console.log(this.state.song);
   };
 
   render() {
+    const style = {
+      margin: "1px"
+    };
     const moodOptions = ["happy", "sad", "calm"];
     const selectOptions = ["one", "two", "three"];
     const defaultMoodOption = moodOptions[0];
     const defaultSelectOption = selectOptions[0];
     return (
       <div className="App" style={{ background: "#e2edff" }}>
-        <nav class="navbar navbar-dark bg-dark">
-          <nav class="navbar navbar-expand-lg">
-            <a class="navbar-brand" href="#">
+        <nav className="navbar navbar-dark bg-dark">
+          <nav className="navbar navbar-expand-lg">
+            <a className="navbar-brand" href="#">
               Music by Mood
             </a>
           </nav>
@@ -144,74 +149,29 @@ class App extends Component {
                   className="col-4"
                   style={{ borderLeft: "1px solid black" }}
                 >
-                  <div
-                    style={
-                      this.state.activeIndex == 0
-                        ? { background: "#cecece", borderRadius: 20 }
-                        : {}
-                    }
-                  >
-                    <img
-                      style={{ width: 100, height: 100 }}
-                      className="pt-4"
-                      src={this.state.happyUrl}
-                      onClick={() => this.onDisplayActive(0)}
-                    />
-                    <div>
-                      <h4>{this.state.happyTrack}</h4>
-                      <h4>{this.state.happyName}</h4>
-                    </div>
-                  </div>
-                  <div
-                    style={
-                      this.state.activeIndex == 1
-                        ? { background: "#cecece", borderRadius: 20 }
-                        : {}
-                    }
-                  >
-                    <img
-                      style={{ width: 100, height: 100 }}
-                      className="pt-4"
-                      src={album2}
-                      onClick={() => this.onDisplayActive(1)}
-                    />
-                    <div>
-                      <h4>song2</h4>
-                    </div>
-                  </div>
-                  <div
-                    style={
-                      this.state.activeIndex == 2
-                        ? { background: "#cecece", borderRadius: 20 }
-                        : {}
-                    }
-                  >
-                    <img
-                      style={{ width: 100, height: 100 }}
-                      className="pt-4"
-                      src={album3}
-                      onClick={() => this.onDisplayActive(2)}
-                    />
-                    <div>
-                      <h4>song3</h4>
-                    </div>
-                  </div>
-                  <div
-                    style={
-                      this.state.activeIndex == 3
-                        ? { background: "#cecece", borderRadius: 20 }
-                        : {}
-                    }
-                  >
-                    <img
-                      style={{ width: 100, height: 100 }}
-                      className="pt-4"
-                      src={album4}
-                      onClick={() => this.onDisplayActive(3)}
-                    />
-                    <div>
-                      <h4>song4</h4>
-                    </div>
+                  <div>
+                    {this.state.song.map(index => {
+                      return index.tracks.track.map(id => {
+                        console.log(id);
+                        return (
+                          <div>
+                            <img
+                              style={{ width: 100, height: 100 }}
+                              src={id.image[2]["#text"]}
+                            />
+                            <p style={style}>
+                              {" "}
+                              {"\n"}
+                              {id.name}
+                            </p>
+                            <p style={style}>
+                              {"\n"}
+                              {id.artist.name}
+                            </p>
+                          </div>
+                        );
+                      });
+                    })}
                   </div>
                 </div>
               </div>
