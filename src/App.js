@@ -50,8 +50,25 @@ class App extends Component {
     this.setState({
       mood: e.value
     });
-    console.log(this.state.mood);
   };
+
+  onSubmitMood = (e) => {
+    this.setState({
+      mood: e.value
+    })
+    axios
+      .get("http://ws.audioscrobbler.com/2.0/?method=tag.getTopTracks&tag=" + this.state.mood + "&api_key=4a9f5581a9cdf20a699f540ac52a95c9" +
+      "&limit=10&format=json")
+      .then(res => {
+        this.setState({
+          happyTrack: res.data.tracks.track[0].name,
+          happyName: res.data.tracks.track[0].artist.name,
+          happyUrl: res.data.tracks.track[0].image[2]["#text"],
+        })
+      })
+    console.log(this.state.mood);
+  }
+
   render() {
     const moodOptions = ["happy", "sad", "calm"];
     const selectOptions = ["one", "two", "three"];
@@ -96,6 +113,7 @@ class App extends Component {
                 <button
                   type="button"
                   className="btn btn-success btn-lg ml-auto"
+                  onClick={(e) => this.onSubmitMood(e)}
                 >
                   Go Search
                 </button>
