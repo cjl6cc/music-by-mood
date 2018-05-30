@@ -12,16 +12,15 @@ import axios from "axios";
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = { activeIndex: 0 };
+    this.state = {
+      activeIndex: 0,
+      song = []
+    };
   }
 
   onDisplayActive(index) {
     this.setState({
-      activeIndex: index,
-      happyTrack: "",
-      happyName: "",
-      happyUrl: "",
-      mood: ""
+      activeIndex: index
     });
   }
 
@@ -37,9 +36,7 @@ class App extends Component {
       )
       .then(res => {
         this.setState({
-          happyTrack: res.data.tracks.track[0].name,
-          happyName: res.data.tracks.track[0].artist.name,
-          happyUrl: res.data.tracks.track[0].image[2]["#text"]
+          song= res.data
         });
         console.log(this.state);
       });
@@ -52,22 +49,26 @@ class App extends Component {
     });
   };
 
-  onSubmitMood = (e) => {
+  onSubmitMood = e => {
     this.setState({
       mood: e.value
-    })
+    });
     axios
-      .get("http://ws.audioscrobbler.com/2.0/?method=tag.getTopTracks&tag=" + this.state.mood + "&api_key=4a9f5581a9cdf20a699f540ac52a95c9" +
-      "&limit=10&format=json")
+      .get(
+        "http://ws.audioscrobbler.com/2.0/?method=tag.getTopTracks&tag=" +
+          this.state.mood +
+          "&api_key=4a9f5581a9cdf20a699f540ac52a95c9" +
+          "&limit=10&format=json"
+      )
       .then(res => {
         this.setState({
           happyTrack: res.data.tracks.track[0].name,
           happyName: res.data.tracks.track[0].artist.name,
-          happyUrl: res.data.tracks.track[0].image[2]["#text"],
-        })
-      })
+          happyUrl: res.data.tracks.track[0].image[2]["#text"]
+        });
+      });
     console.log(this.state.mood);
-  }
+  };
 
   render() {
     const moodOptions = ["happy", "sad", "calm"];
@@ -113,7 +114,7 @@ class App extends Component {
                 <button
                   type="button"
                   className="btn btn-success btn-lg ml-auto"
-                  onClick={(e) => this.onSubmitMood(e)}
+                  onClick={e => this.onSubmitMood(e)}
                 >
                   Go Search
                 </button>
