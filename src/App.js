@@ -18,7 +18,8 @@ class App extends Component {
       happyName: "",
       happyUrl: "",
       mood: "",
-      song: []
+      song: [],
+      checkVal: ""
     };
   }
 
@@ -47,16 +48,26 @@ class App extends Component {
   }
 
   selectHandler = e => {
-    //console.log(e.value);
     this.setState({
       mood: e.value
     });
   };
-
+  shuffle = a => {
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  };
   onSubmitMood = e => {
     this.setState({
-      mood: e.value
+      mood: e.value,
+      checkVal: ""
     });
+
+    for (let i = 0; i < 10; i++) {
+      document.getElementsByClassName(i)[0].style.background = "#e2edff";
+    }
     axios
       .get(
         "http://ws.audioscrobbler.com/2.0/?method=tag.getTopTracks&tag=" +
@@ -65,17 +76,61 @@ class App extends Component {
           "&limit=10&format=json"
       )
       .then(res => {
+        let shuffledArray = shuffle(res.data);
         this.setState({
-          song: [res.data]
+          song: shuffledArray
         });
       });
-    // console.log(this.state.song);
+  };
+
+  pressHandler = num => {
+    for (let i = 0; i < 10; i++) {
+      document.getElementsByClassName(i)[0].style.background = "#e2edff";
+    }
+    this.setState({
+      happyName: document.getElementsByClassName(num)[0].children[2]
+        .textContent,
+      happyUrl: document.getElementsByClassName(num)[0].children[0].src,
+      happyTrack: document.getElementsByClassName(num)[0].children[1]
+        .textContent,
+      checkVal: "lo"
+    });
+    document.getElementsByClassName(num)[0].style.background =
+      "rgba(52, 52, 52, 0.3)";
   };
 
   render() {
     const style = {
       margin: "1px"
     };
+    const scrollStyle = {
+      height: "620px",
+      overflow: "auto",
+      borderLeft: "1px solid black"
+    };
+
+    const allStyle = {
+      background: "#e2edff"
+    };
+
+    const check =
+      this.state.happyUrl && this.state.checkVal ? (
+        <div>
+          <img
+            style={{ width: "75%", height: "50%" }}
+            className="pt-5"
+            src={this.state.happyUrl}
+          />
+
+          <div>{<h2>{this.state.happyTrack}</h2>}</div>
+          <div>{<h3>{this.state.happyName}</h3>}</div>
+          <div>
+            <h3 />
+          </div>
+        </div>
+      ) : (
+        <div />
+      );
     const moodOptions = ["happy", "sad", "calm"];
     const selectOptions = ["one", "two", "three"];
     const defaultMoodOption = moodOptions[0];
@@ -105,7 +160,7 @@ class App extends Component {
               />
             </div>
             <div className="col-3">
-              <div>
+              {/* <div>
                 <h2>Sort by:</h2>
               </div>
               <Dropdown
@@ -114,7 +169,7 @@ class App extends Component {
                 onChange={this._onSelect}
                 value={defaultSelectOption}
                 placeholder="Select an option"
-              />
+              /> */}
               <div className="d-flex pt-5">
                 <button
                   type="button"
@@ -128,33 +183,21 @@ class App extends Component {
             <div className="col-6">
               <div className="row">
                 <div className="col-8">
-                  <div>
-                    <img
-                      style={{ width: "75%", height: "50%" }}
-                      className="pt-5"
-                      src={album1}
-                    />
-                    <div>
-                      <h2>Rolling in the deep</h2>
-                    </div>
-                    <div>
-                      <h3>21</h3>
-                    </div>
-                    <div>
-                      <h3>Soul/Pop</h3>
-                    </div>
-                  </div>
+                  <div>{check}</div>
                 </div>
-                <div
-                  className="col-4"
-                  style={{ borderLeft: "1px solid black" }}
-                >
+                <div className="col-4" style={scrollStyle}>
                   <div>
                     {this.state.song.map(index => {
+                      let count = -1;
                       return index.tracks.track.map(id => {
-                        console.log(id);
+                        count++;
+                        let number = count;
                         return (
-                          <div>
+                          <div
+                            style={allStyle}
+                            className={number}
+                            onClick={() => this.pressHandler(number)}
+                          >
                             <img
                               style={{ width: 100, height: 100 }}
                               src={id.image[2]["#text"]}
