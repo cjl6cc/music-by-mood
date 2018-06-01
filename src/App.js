@@ -18,7 +18,7 @@ class App extends Component {
       happyTrack: "",
       happyName: "",
       happyUrl: "",
-      mood: "",
+      mood: "happy",
       song: [],
       checkVal: ""
     };
@@ -50,12 +50,6 @@ class App extends Component {
 
   selectHandler = e => {
     this.setState({
-      mood: e.value
-    });
-  };
-
-  onSubmitMood = e => {
-    this.setState({
       mood: e.value,
       checkVal: ""
     });
@@ -63,25 +57,54 @@ class App extends Component {
     for (let i = 0; i < 10; i++) {
       document.getElementsByClassName(i)[0].style.background = "#e2edff";
     }
+
     axios
       .get(
         "http://ws.audioscrobbler.com/2.0/?method=tag.getTopTracks&tag=" +
-          this.state.mood +
+          e.value +
           "&api_key=4a9f5581a9cdf20a699f540ac52a95c9" +
           "&limit=10&format=json"
       )
       .then(res => {
-        console.log("res.data");
+        console.log(this.state.mood);
         console.log([res.data]);
         let array = [res.data];
         let newArray = shuffle(array);
-        console.log("newArray");
         console.log(newArray);
         this.setState({
           song: newArray
         });
       });
   };
+
+  // onSubmitMood = e => {
+  //   this.setState({
+  //     mood: e.value,
+  //     checkVal: ""
+  //   });
+  //
+  //   for (let i = 0; i < 10; i++) {
+  //     document.getElementsByClassName(i)[0].style.background = "#e2edff";
+  //   }
+  //   axios
+  //     .get(
+  //       "http://ws.audioscrobbler.com/2.0/?method=tag.getTopTracks&tag=" +
+  //         this.state.mood +
+  //         "&api_key=4a9f5581a9cdf20a699f540ac52a95c9" +
+  //         "&limit=10&format=json"
+  //     )
+  //     .then(res => {
+  //       console.log("res.data");
+  //       console.log([res.data]);
+  //       let array = [res.data];
+  //       let newArray = shuffle(array);
+  //       console.log("newArray");
+  //       console.log(newArray);
+  //       this.setState({
+  //         song: newArray
+  //       });
+  //     });
+  // };
 
   pressHandler = num => {
     for (let i = 0; i < 10; i++) {
@@ -148,7 +171,7 @@ class App extends Component {
           <div className="row">
             <div className="col-3">
               <div>
-                <h2>Moods:</h2>
+                <h2>Pick your mood:</h2>
               </div>
               <Dropdown
                 options={moodOptions}
@@ -170,15 +193,7 @@ class App extends Component {
                 value={defaultSelectOption}
                 placeholder="Select an option"
               /> */}
-              <div className="d-flex pt-5">
-                <button
-                  type="button"
-                  className="btn btn-success btn-lg ml-auto"
-                  onClick={e => this.onSubmitMood(e)}
-                >
-                  Go Search
-                </button>
-              </div>
+
             </div>
             <div className="col-6">
               <div className="row">
@@ -225,5 +240,6 @@ class App extends Component {
     );
   }
 }
+
 
 export default App;
