@@ -156,7 +156,7 @@ class App extends Component {
       );
     const moodOptions = ["happy", "sad", "calm", "party", "hardcore", "dance", "bad"];
     const selectOptions = ["one", "two", "three"];
-    const defaultMoodOption = moodOptions[0];
+
     const defaultSelectOption = selectOptions[0];
     return (
       <div className="App" style={{ background: "#e2edff" }}>
@@ -181,7 +181,7 @@ class App extends Component {
                 onChange={e => {
                   this.selectHandler(e);
                 }}
-                value={defaultMoodOption}
+                value={this.state.mood}
                 placeholder="Select an option"
               />
             </div>
