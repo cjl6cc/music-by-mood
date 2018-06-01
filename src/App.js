@@ -162,13 +162,16 @@ class App extends Component {
       <div className="App" style={{ background: "#e2edff" }}>
         <nav className="navbar navbar-dark bg-dark">
           <nav className="navbar navbar-expand-lg">
-            <a className="navbar-brand" href="#">
-              Music by Mood
-            </a>
+              <a className="navbar-brand" href="#" style={{fontFamily: 'Great Vibes', marginLeft: 492}}>
+                <h1>Music by Mood</h1>
+              </a>
           </nav>
         </nav>
         <div className="col-12 pt-5">
           <div className="row">
+            <div className="col-1">
+
+            </div>
             <div className="col-4">
               <div>
                 <h2>Pick your mood:</h2>
@@ -182,7 +185,7 @@ class App extends Component {
                 placeholder="Select an option"
               />
             </div>
-            <div className="col-2">
+            <div className="col-1">
               {/* <div>
                 <h2>Sort by:</h2>
               </div>
