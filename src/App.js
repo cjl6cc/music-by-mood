@@ -154,7 +154,7 @@ class App extends Component {
       ) : (
         <div />
       );
-    const moodOptions = ["happy", "sad", "calm"];
+    const moodOptions = ["happy", "sad", "calm", "party", "hardcore", "dance", "bad"];
     const selectOptions = ["one", "two", "three"];
     const defaultMoodOption = moodOptions[0];
     const defaultSelectOption = selectOptions[0];
@@ -169,7 +169,7 @@ class App extends Component {
         </nav>
         <div className="col-12 pt-5">
           <div className="row">
-            <div className="col-3">
+            <div className="col-4">
               <div>
                 <h2>Pick your mood:</h2>
               </div>
@@ -182,7 +182,7 @@ class App extends Component {
                 placeholder="Select an option"
               />
             </div>
-            <div className="col-3">
+            <div className="col-2">
               {/* <div>
                 <h2>Sort by:</h2>
               </div>
