@@ -8,6 +8,7 @@ import album2 from "./assets/placeholders/album2.jpg";
 import album3 from "./assets/placeholders/album3.jpg";
 import album4 from "./assets/placeholders/album4.jpeg";
 import axios from "axios";
+import shuffle from "shuffle-array";
 
 class App extends Component {
   constructor(props) {
@@ -52,13 +53,7 @@ class App extends Component {
       mood: e.value
     });
   };
-  shuffle = a => {
-    for (let i = a.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [a[i], a[j]] = [a[j], a[i]];
-    }
-    return a;
-  };
+
   onSubmitMood = e => {
     this.setState({
       mood: e.value,
@@ -76,9 +71,14 @@ class App extends Component {
           "&limit=10&format=json"
       )
       .then(res => {
-        let shuffledArray = shuffle(res.data);
+        console.log("res.data");
+        console.log([res.data]);
+        let array = [res.data];
+        let newArray = shuffle(array);
+        console.log("newArray");
+        console.log(newArray);
         this.setState({
-          song: shuffledArray
+          song: newArray
         });
       });
   };
